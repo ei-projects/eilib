@@ -1,5 +1,7 @@
 import struct
 
+from eilib.helpers import read_exactly
+
 
 def friendly_name_to_classname(name, *, check_plural=False, remove_plural=False):
     if check_plural and not name.endswith("s"):
@@ -15,18 +17,6 @@ def friendly_name_to_varname(name):
     result = name.lower().replace(" ", "_")
     assert result and result[0].isalpha() and all(c.isalnum() or c == "_" for c in result)
     return result
-
-
-def read_exactly(f, size):
-    remaining = size
-    chunks = []
-    while remaining > 0:
-        data = f.read(remaining)
-        if not data:
-            raise Exception("Unexpected EOF")
-        chunks.append(data)
-        remaining -= len(data)
-    return b''.join(chunks)
 
 
 def read_section_header(f):
