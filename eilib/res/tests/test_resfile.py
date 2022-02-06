@@ -33,7 +33,7 @@ class TestResFile(unittest.TestCase):
 
         # Test append mode
         test_files_upd = {
-            'foo': b'fooooo-old', # Update old file
+            'foo': b'fooooo-old',  # Update old file
             'foo-new': b'foooooo-new',  # New file
         }
         resfile.seek(0)
