@@ -114,13 +114,10 @@ class ResFile:
         self._opened = isinstance(file, str)
         self._file = open(file, mode + 'b') if self._opened else file
         self._mode = mode
-        self._file_size = 0
         self._table = {}
         self._subfile = None
 
         if self._mode == 'r':
-            self._file.seek(0, 2)
-            self._file_size = self._file.tell()
             self._read_headers()
 
     def __enter__(self):
@@ -191,13 +188,15 @@ class ResFile:
         return ''.join((c.lower() if ord(c) >= 128 else c) for c in value)
 
     def _read_headers(self):
+        self._file.seek(0, 2)
+        res_file_size = self._file.tell()
         self._file.seek(0)
         header_data = self._read(_HEADER_SIZE, 'File header is truncated')
         magic, table_size, table_offset, names_size = struct.unpack(_HEADER_FORMAT, header_data)
         if magic != _SIGNATURE:
             raise InvalidResFile('Invalid signature')
         table_data_size = table_size * _TABLE_ENTRY_SiZE
-        if table_offset + table_data_size + names_size > self._file_size:
+        if table_offset + table_data_size + names_size > res_file_size:
             raise InvalidResFile('Files table is truncated')
 
         self._file.seek(table_offset)
