@@ -29,7 +29,21 @@ class TestResFile(unittest.TestCase):
             for name, data in test_files.items():
                 with res.open(name, 'w') as file:
                     file.write(data)
+        self.check_resfile_content(resfile, test_files)
 
+        # Test append mode
+        test_files_upd = {
+            'foo': b'fooooo-old', # Update old file
+            'foo-new': b'foooooo-new',  # New file
+        }
+        resfile.seek(0)
+        with ResFile(resfile, 'a') as res:
+            for name, data in test_files_upd.items():
+                with res.open(name, 'w') as file:
+                    file.write(data)
+        self.check_resfile_content(resfile, {**test_files, **test_files_upd})
+
+    def check_resfile_content(self, resfile, test_files):
         resfile.seek(0)
         with ResFile(resfile) as res:
             for name, data in test_files.items():

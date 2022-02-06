@@ -108,8 +108,8 @@ class _ResSubFile(io.BufferedIOBase):
 class ResFile:
 
     def __init__(self, file, mode='r'):
-        if mode not in ('r', 'w'):
-            raise ValueError('ResFile requires mode "r", "w"')
+        if mode not in ('r', 'w', 'a'):
+            raise ValueError('ResFile requires mode "r", "w", "a"')
 
         self._opened = isinstance(file, str)
         self._file = open(file, mode + 'b') if self._opened else file
@@ -117,7 +117,7 @@ class ResFile:
         self._table = {}
         self._subfile = None
 
-        if self._mode == 'r':
+        if self._mode in ('r', 'a'):
             self._read_headers()
 
     def __enter__(self):
