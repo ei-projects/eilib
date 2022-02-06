@@ -231,7 +231,8 @@ class ResFile:
                 while hash_table[last_free_index][0] is not None:
                     last_free_index -= 1
 
-                index = hash_table[index][1] = last_free_index
+                hash_table[index][1] = last_free_index
+                index = last_free_index
                 last_free_index -= 1
 
             # Put entry in the hash table
