@@ -119,6 +119,8 @@ class ResFile:
 
         if self._mode in ('r', 'a'):
             self._read_headers()
+        if self._mode == 'a':
+            self._file.truncate(max(e.file_offset + e.file_size for e in self._table.values()))
 
     def __enter__(self):
         return self
