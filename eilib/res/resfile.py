@@ -112,7 +112,7 @@ class ResFile:
             raise ValueError('ResFile requires mode "r", "w", "a"')
 
         self._opened = isinstance(file, str)
-        self._file = open(file, mode + 'b') if self._opened else file
+        self._file = open(file, mode + 'b+') if self._opened else file
         self._mode = mode
         self._table = {}
         self._subfile = None
