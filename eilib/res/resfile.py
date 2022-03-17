@@ -1,5 +1,6 @@
 import copy
 import io
+import os
 import struct
 from dataclasses import dataclass
 from datetime import datetime
@@ -112,15 +113,22 @@ class ResFile:
             raise ValueError('ResFile requires mode "r", "w", "a"')
 
         self._opened = isinstance(file, str)
-        self._file = open(file, mode + 'b+') if self._opened else file
+        self._file = None
         self._mode = mode
         self._table = {}
         self._subfile = None
 
+        if not self._file and self._mode == 'a':
+            try:
+                self._file = open(file, 'rb+')
+            except FileNotFoundError:
+                self._mode = 'w'
+
+        if not self._file:
+            self._file = open(file, self._mode + 'b')
+
         if self._mode in ('r', 'a'):
             self._read_headers()
-        if self._mode == 'a':
-            self._file.truncate(max(e.file_offset + e.file_size for e in self._table.values()))
 
     def __enter__(self):
         return self
@@ -172,7 +180,8 @@ class ResFile:
         self._file = None
 
     def _write_alignment(self):
-        self._file.seek(0, 2)
+        end_of_files_data = max(e.file_offset + e.file_size for e in self._table.values())
+        self._file.seek(end_of_files_data)
         self._file.write(b'\0' * ((16 - self._file.tell() % 16) % 16))
 
     def _close_subfile(self):
@@ -259,6 +268,7 @@ class ResFile:
 
         # Write file names
         self._file.write(b''.join(encoded_names))
+        self._file.truncate()
 
         # Update file header
         self._file.seek(0)
