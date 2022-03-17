@@ -113,7 +113,7 @@ class ResFile:
             raise ValueError('ResFile requires mode "r", "w", "a"')
 
         self._opened = isinstance(file, str)
-        self._file = None
+        self._file = file if not self._opened else None
         self._mode = mode
         self._table = {}
         self._subfile = None
@@ -180,7 +180,10 @@ class ResFile:
         self._file = None
 
     def _write_alignment(self):
-        end_of_files_data = max(e.file_offset + e.file_size for e in self._table.values())
+        end_of_files_data = (
+            max(e.file_offset + e.file_size for e in self._table.values())
+            if self._table else 0
+        )
         self._file.seek(end_of_files_data)
         self._file.write(b'\0' * ((16 - self._file.tell() % 16) % 16))
 
