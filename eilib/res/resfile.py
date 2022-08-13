@@ -1,6 +1,5 @@
 import copy
 import io
-import os
 import struct
 from dataclasses import dataclass
 from datetime import datetime

@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="eilib",
-    version="0.0.1",
+    version="0.0.2",
     author="Yury Kotov",
     author_email="koteyur@gmail.com",
     description="Library to work with Evil Islands binary formats",
@@ -13,5 +13,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.9',
 )
