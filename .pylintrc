@@ -277,10 +277,13 @@ good-names=i,
            _,
            f,
            id,
+           x,
+           y,
+           z,
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
-good-names-rgxs=
+good-names-rgxs=[a-z]{2},
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=no
