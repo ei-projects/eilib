@@ -145,21 +145,21 @@ class ResFile:
             raise ValueError('only one opened file is allowed')
 
         if mode == 'r':
-            entry = self._table[name]
+            entry = self._table[self._lower_ascii(name)]
         elif mode == 'w':
             if self._mode == 'r':
                 raise ValueError('ResFile was opened in read mode, so open() requires mode "r"')
             self._write_alignment()
             entry = ResFileItemInfo(name, 0, max(_HEADER_SIZE, self._file.tell()), datetime.now())
-            self._table[name] = entry
+            self._table[self._lower_ascii(name)] = entry
         else:
             raise ValueError('open() requires mode "r" or "w"')
 
         self._subfile = _ResSubFile(self._file, mode, entry, self._close_subfile)
         return self._subfile
 
-    def get_info(self, name):
-        return copy.deepcopy(self._table[name])
+    def get_info(self, name: str) -> ResFileItemInfo:
+        return copy.deepcopy(self._table[self._lower_ascii(name)])
 
     def iter_files(self):
         for entry in self._table.values():

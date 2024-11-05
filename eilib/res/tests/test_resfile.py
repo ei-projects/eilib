@@ -24,7 +24,7 @@ class TestResFile(unittest.TestCase):
         self.check_resfile_content(resfile, {})
 
         # Test resfile consistency
-        test_files = {'foo': b'1234567', 'bar': b'hello world', 'rab': b'aaaabbbbaaaabbbb'}
+        test_files = {'Foo': b'1234567', 'Bar': b'hello world', 'raB': b'aaaabbbbaaaabbbb'}
         with ResFile(resfile, 'w') as res:
             for name, data in test_files.items():
                 with res.open(name, 'w') as file:
@@ -33,8 +33,8 @@ class TestResFile(unittest.TestCase):
 
         # Test append mode
         test_files_upd = {
-            'foo': b'fooooo-old',  # Update old file
-            'foo-new': b'foooooo-new',  # New file
+            'Foo': b'fooooo-old',  # Update old file
+            'Foo-new': b'foooooo-new',  # New file
         }
         with ResFile(resfile, 'a') as res:
             for name, data in test_files_upd.items():
