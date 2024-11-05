@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="eilib",
-    version="0.0.2",
+    version="0.0.3",
     author="Yury Kotov",
     author_email="koteyur@gmail.com",
     description="Library to work with Evil Islands binary formats",
