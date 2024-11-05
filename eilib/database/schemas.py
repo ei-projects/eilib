@@ -1,5 +1,17 @@
-from .basic_types import Byte, ByteList, Float, FloatList, ShopsType, ShortString, \
-                         ShortStringList, SignedLong, String, StringList, Unknown, UnsignedLong
+from .basic_types import (
+    Byte,
+    ByteList,
+    Float,
+    FloatList,
+    ShopsType,
+    ShortString,
+    ShortStringList,
+    SignedLong,
+    String,
+    StringList,
+    Unknown,
+    UnsignedLong,
+)
 
 # TODO: Review *List types to custom types
 

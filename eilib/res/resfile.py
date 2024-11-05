@@ -122,12 +122,12 @@ class ResFile:
 
         if not self._file and self._mode == 'a':
             try:
-                self._file = open(file, 'rb+')
+                self._file = open(file, 'rb+')  # noqa: SIM115
             except FileNotFoundError:
                 self._mode = 'w'
 
         if not self._file:
-            self._file = open(file, self._mode + 'b')
+            self._file = open(file, self._mode + 'b')  # noqa: SIM115
 
         if self._mode in ('r', 'a'):
             self._read_headers()

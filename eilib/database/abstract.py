@@ -1,19 +1,25 @@
 import logging
 import math
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from io import BytesIO
-from typing import Generic, Iterator, TypeVar
+from typing import Generic, TypeVar
 
 from . import schemas
 from .basic_types import BasicList, BasicType
-from .helpers import SectionScope, friendly_name_to_varname, parse_custom_type, read_exactly, \
-                     write_section_header
+from .helpers import (
+    SectionScope,
+    friendly_name_to_varname,
+    parse_custom_type,
+    read_exactly,
+    write_section_header,
+)
 
 log = logging.getLogger("eilib.database")
 VT = TypeVar("VT")
 
 
-class EiDatabaseCustomType(ABC):
+class EiDatabaseCustomType:
 
     __slots__ = (
         '_schema',
@@ -209,10 +215,7 @@ class EiDatabaseTable(Generic[VT], ABC):
         if type(table1) is not type(table2):
             raise TypeError
 
-        for row1, row2 in zip(table1, table2):
-            if row1 != row2:
-                return False
-        return True
+        return all(row1 == row2 for row1, row2 in zip(table1, table2))
 
     def save(self, f):
         with BytesIO() as buf:
@@ -246,7 +249,7 @@ class EiDatabaseTable(Generic[VT], ABC):
         return iter(self._rows)
 
 
-class EiDatabase(ABC):
+class EiDatabase:
 
     __slots__ = (
         '_schema',
@@ -281,10 +284,7 @@ class EiDatabase(ABC):
         if type(database1) is not type(database2):
             raise TypeError
 
-        for table1, table2 in zip(database1.tables, database2.tables):
-            if table1 != table2:
-                return False
-        return True
+        return all(table1 == table2 for table1, table2 in zip(database1.tables, database2.tables))
 
     def save(self, f):
         # Write tables

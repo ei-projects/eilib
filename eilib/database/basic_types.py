@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import struct
 from abc import ABC, abstractmethod
 from functools import partial
 from io import BytesIO
-from typing import List
 
 from .helpers import SectionScope, read_exactly, write_section_header
 
@@ -140,7 +141,7 @@ class ShopsType(BasicType):
     def value_type(self) -> type:
         return int
 
-    def encode(self, value: List[bool]) -> bytes:
+    def encode(self, value: list[bool]) -> bytes:
         if len(value) != 5:
             raise ValueError
         encoded_val = 0
@@ -148,7 +149,7 @@ class ShopsType(BasicType):
             encoded_val |= (int(val) << i)
         return struct.pack('<L', encoded_val)
 
-    def decode(self, data: bytes) -> List[bool]:
+    def decode(self, data: bytes) -> list[bool]:
         value = struct.unpack('<L', data)[0]
         return [bool(value & (1 << i)) for i in range(5)]
 
@@ -189,7 +190,7 @@ class BasicList(BasicType):
             f.flush()
             return f.getvalue()
 
-    def decode(self, data: bytes) -> List[bool]:
+    def decode(self, data: bytes) -> list[bool]:
         if isinstance(self._base_type, BasicType) and self._base_type.binary_format is not None:
             return [v[0] for v in struct.iter_unpack(self._base_type.binary_format, data)]
 
