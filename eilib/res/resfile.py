@@ -202,7 +202,7 @@ class ResFile:
             raise InvalidResFile(message) from ex
 
     def _lower_ascii(self, value):
-        return ''.join((c.lower() if ord(c) >= 128 else c) for c in value)
+        return ''.join((c.lower() if ord(c) < 128 else c) for c in value)
 
     def _read_headers(self):
         self._file.seek(0, 2)
